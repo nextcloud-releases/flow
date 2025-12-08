@@ -18,7 +18,7 @@ env:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'nextcloud' }}
+    if: ${{ github.repository_owner == 'nextcloud-releases' }}
     steps:
       - name: Check actor permission
         uses: skjnldsv/check-actor-permission@69e92a3c4711150929bca9fcf34448c5bf5526e7 # v3.0
