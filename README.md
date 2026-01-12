@@ -105,10 +105,10 @@ Follow these steps to manually deploy Flow without Docker:
    **Note:** If you are using a non-standard version of Windmill from the ExApp, please adjust its version in the `Makefile` by editing the line under the `init` target:
 
    ```makefile
-   git -c advice.detachedHead=False clone -b v1.394.4 https://github.com/windmill-labs/windmill.git windmill_src
+   git -c advice.detachedHead=False clone -b v1.603.4 https://github.com/windmill-labs/windmill.git windmill_src
    ```
 
-   Replace `v1.394.4` with your desired Windmill version.
+   Replace `v1.603.4` with your desired Windmill version.
 
 7. **Initialize Windmill Source and Build Frontend**
 
@@ -148,10 +148,10 @@ Follow these steps to manually deploy Flow without Docker:
 
 *Windmill will be deployed as per its official documentation. The following steps simplify its integration with Nextcloud's development setup.*
 
-1. In the `.env` file used for deploying Windmill's Docker Compose containers, set the desired Windmill version. The current version can be found in the `Makefile` (e.g., `1.394.4`). Adjust the following line accordingly:
+1. In the `.env` file used for deploying Windmill's Docker Compose containers, set the desired Windmill version. The current version can be found in the `Makefile` (e.g., `1.603.4`). Adjust the following line accordingly:
 
    ```bash
-   WM_IMAGE=ghcr.io/windmill-labs/windmill:1.394.4
+   WM_IMAGE=ghcr.io/windmill-labs/windmill:1.603.4
    ```
 
 2. Add the `master_default` network (or the network name used for Nextcloud in your Julius `nextcloud-docker-dev` setup) to each container in Windmill's `docker-compose.yml`.

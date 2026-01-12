@@ -17,9 +17,16 @@ ensure_postgres_installed() {
     else
         echo "PostgreSQL binaries not found."
         echo "Adding the PostgreSQL APT repository..."
-        apt-get update && apt-get install -y gnupg
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-        echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+        apt-get update && apt-get install -y gnupg curl
+        # Use modern method for GPG keys (apt-key is deprecated)
+        mkdir -p /etc/apt/keyrings
+        curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/keyrings/postgresql.gpg
+        # Use bookworm as fallback for newer Debian versions (trixie/sid)
+        DISTRO=$(lsb_release -cs 2>/dev/null || echo "bookworm")
+        if [ "$DISTRO" = "trixie" ] || [ "$DISTRO" = "sid" ]; then
+            DISTRO="bookworm"
+        fi
+        echo "deb [signed-by=/etc/apt/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt/ ${DISTRO}-pgdg main" > /etc/apt/sources.list.d/pgdg.list
         echo "Installing PostgreSQL..."
         apt-get update && apt-get install -y postgresql-$PG_VERSION
     fi

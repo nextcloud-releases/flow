@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: MIT
+SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 APP_ID := flow
@@ -33,7 +34,7 @@ help:
 .PHONY: init
 init:
 	rm -rf windmill_src
-	git -c advice.detachedHead=False clone -b v1.394.4 https://github.com/windmill-labs/windmill.git windmill_src
+	git -c advice.detachedHead=False clone -b v1.603.4 https://github.com/windmill-labs/windmill.git windmill_src
 	cp Dockerfile requirements.txt windmill_src/
 
 	cp -r ex_app windmill_src/
@@ -55,7 +56,18 @@ build-push:
 	docker login ghcr.io
 	docker buildx build --push \
 		--build-arg VITE_BASE_URL=/index.php/apps/app_api/proxy/flow \
+		--build-arg features=python \
 		--platform linux/arm64/v8,linux/amd64 \
+		--tag ghcr.io/nextcloud/$(APP_ID):$(APP_VERSION) \
+		--file windmill_src/Dockerfile \
+		windmill_src
+
+.PHONY: build-amd64
+build-amd64:
+	docker buildx build --load \
+		--build-arg VITE_BASE_URL=/index.php/apps/app_api/proxy/flow \
+		--build-arg features=python \
+		--platform linux/amd64 \
 		--tag ghcr.io/nextcloud/$(APP_ID):$(APP_VERSION) \
 		--file windmill_src/Dockerfile \
 		windmill_src
